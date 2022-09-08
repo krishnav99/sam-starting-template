@@ -1,0 +1,30 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  This is a satandard sam template
+  
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 60 #Timout in seconds
+
+Resources:
+  HelloWorld: #Name of our lambda functions
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      FunctionName: hello-world #Name of the lambda function
+      CodeUri: hello-world-s3-bucket/ #Path of the s3 uri
+      Handler: app.lambdaHandler #Handler function in app.js that is executed when lambda is invoked
+      Runtime: nodejs16.x 
+      Architectures:
+        - x86_64
+      Events: #Trigger for our lambda function
+        HelloWorldHttpApi: #Name of your API Gateway resource
+          Type: HttpApi # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /{proxy+}
+            Method: any
+      Environment:
+        Variables: #Environment variables
+         SOME_VAR: somevalue
+
